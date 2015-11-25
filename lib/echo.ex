@@ -25,6 +25,7 @@ defmodule Echo do
     {:noreply, socket_server}
   end
 
+  defp serve({:error, _}), do: :ok
   defp serve(socket_client) do
     socket_client
     |> read_line
@@ -33,12 +34,21 @@ defmodule Echo do
   end
 
   defp read_line(socket_client) do
-    {:ok, line} = :gen_tcp.recv(socket_client, 0)
-    {socket_client, line}
+    case :gen_tcp.recv(socket_client, 0) do
+      {:ok, line} ->
+        {socket_client, line}
+      {:error, _} = error ->
+        error
+    end
   end
 
+  defp echo_line({:error, _} = error), do: error
   defp echo_line({socket_client, line}) do
-    :gen_tcp.send(socket_client, line)
-    socket_client
+    case :gen_tcp.send(socket_client, line) do
+      :ok ->
+        socket_client
+      {:error, _} = error ->
+        error
+    end
   end
 end
