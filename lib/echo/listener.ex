@@ -37,7 +37,7 @@ defmodule Echo.Listener do
   end
 
   defp serve(socket_client) do
-    {:ok, server} = Echo.Server.start_link
+    {:ok, server} = Supervisor.start_child(Echo.Server.Supervisor, [])
     :gen_tcp.controlling_process(socket_client, server)
     Echo.Server.meet(server, socket_client)
   end

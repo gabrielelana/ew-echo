@@ -54,6 +54,8 @@ defmodule Echo.Server do
     end
   end
 
+  defp continue({:error, :closed, socket_client}),
+    do: {:stop, :normal, socket_client}
   defp continue({:error, reason, socket_client}),
     do: {:stop, reason, socket_client}
   defp continue(socket_client) do
