@@ -14,7 +14,9 @@ defmodule Echo.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger],
+     mod: {Echo, []},
+     env: [port: 4242]]
   end
 
   # Dependencies can be Hex packages:
