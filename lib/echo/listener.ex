@@ -19,10 +19,13 @@ defmodule Echo.Listener do
   end
 
   def handle_cast(:accept, socket_server) do
-    case :gen_tcp.accept(socket_server) do
+    case :gen_tcp.accept(socket_server, 500) do
       {:ok, socket_client} ->
         Logger.info "Accepted connection"
         serve(socket_client)
+        GenServer.cast(self, :accept)
+        {:noreply, socket_server}
+      {:error, :timeout} ->
         GenServer.cast(self, :accept)
         {:noreply, socket_server}
       {:error, reason} ->

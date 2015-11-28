@@ -8,6 +8,7 @@ defmodule Echo.Supervisor do
   def init(port) do
     children = [
       supervisor(Echo.Server.Supervisor, [[], [name: Echo.Server.Supervisor]]),
+      worker(Redix, [[], [name: Redix]]),
       worker(Echo.Listener, [port]),
     ]
 
