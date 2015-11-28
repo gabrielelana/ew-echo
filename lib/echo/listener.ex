@@ -7,7 +7,7 @@ defmodule Echo.Listener do
   end
 
   def init(port) do
-    options = [:binary, packet: :line, active: false, reuseaddr: true]
+    options = [:binary, packet: :line, active: true, reuseaddr: true]
     case :gen_tcp.listen(port, options) do
       {:ok, socket_server} ->
         Logger.info "Listening on #{port}"
